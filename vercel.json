@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "destination": "/pages/business" },
+    { "source": "/login", "destination": "/pages/login" },
+    { "source": "/signup", "destination": "/pages/signup" },
+    { "source": "/coming-soon", "destination": "/pages/coming-soon" },
+    { "source": "/thanks", "destination": "/pages/thanks" },
+    { "source": "/verify-success", "destination": "/pages/verify-success" },
+    { "source": "/verify-failed", "destination": "/pages/verify-failed" },
+    { "source": "/ai", "destination": "/pages/ailanding" },
+    { "source": "/about-careers", "destination": "/pages/about-careers" },
+    { "source": "/blog", "destination": "/pages/blog" },
+    { "source": "/contact", "destination": "/pages/contact" },
+    { "source": "/cookie-policy", "destination": "/pages/cookie-policy" },
+    { "source": "/payment", "destination": "/pages/payment" },
+    { "source": "/privacy-policy", "destination": "/pages/privacy-policy" },
+    { "source": "/schedule-call", "destination": "/pages/schedule-call" },
+    { "source": "/student", "destination": "/pages/student" },
+    { "source": "/support", "destination": "/pages/support" },
+    { "source": "/terms-of-service", "destination": "/pages/terms-of-service" }
+  ]
+}

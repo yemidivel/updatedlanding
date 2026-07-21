@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="icon.png" />
+<title>Connecting to page......</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    overflow: hidden;
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .logo-img {
+    width: 220px;
+    height: 220px;
+    object-fit: contain;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    0%   { opacity: 0; transform: scale(0.92); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .brand-text {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1f2937;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out 0.6s forwards;
+  }
+
+  .brand-text span { color: #2979FF; }
+
+  @keyframes fadeUp {
+    0%   { opacity: 0; transform: translateY(14px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <img src="../icon.png" alt="SellSync" class="logo-img" width="220" height="220" />
+    <div class="brand-text"><span>SellSync</span></div>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "business.html";
+    }, 4200);
+  </script>
+</body>
+</html>
