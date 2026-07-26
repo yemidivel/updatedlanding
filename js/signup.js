@@ -1,10 +1,12 @@
 (function () {
   'use strict';
 
-  var PLAN_KEY = 'sellsync_signup_plan';
-  var plan = (function () {
-    var m = /[?&]plan=([^&]+)/.exec(window.location.search);
-    var p = m ? m[1].toLowerCase() : null;
+  const API_BASE_URL = CONFIG.API_BASE_URL;
+  const PLAN_KEY = 'sellsync_signup_plan';
+
+  const plan = (function () {
+    const m = /[?&]plan=([^&]+)/.exec(window.location.search);
+    const p = m ? m[1].toLowerCase() : null;
     if (p && ['starter', 'growth', 'scale'].indexOf(p) !== -1) {
       try { sessionStorage.setItem(PLAN_KEY, p); } catch (e) {}
       return p;
@@ -13,31 +15,31 @@
   })();
 
   if (!plan) {
-    window.location.replace('business.html#get-started');
+    window.location.replace('/business#get-started');
     return;
   }
 
-  var formMessage = document.getElementById('formMessage');
-  var step1 = document.getElementById('step1');
-  var step2 = document.getElementById('step2');
-  var step3 = document.getElementById('step3');
-  var form1 = document.getElementById('signupFormStep1');
-  var form2 = document.getElementById('signupFormStep2');
-  var form3 = document.getElementById('signupFormStep3');
-  var btnStep1 = document.getElementById('btnStep1');
-  var btnStep2 = document.getElementById('btnStep2');
-  var btnStep3 = document.getElementById('btnStep3');
-  var btnSkip = document.getElementById('btnSkip');
+  const formMessage = document.getElementById('formMessage');
+  const step1 = document.getElementById('step1');
+  const step2 = document.getElementById('step2');
+  const step3 = document.getElementById('step3');
+  const form1 = document.getElementById('signupFormStep1');
+  const form2 = document.getElementById('signupFormStep2');
+  const form3 = document.getElementById('signupFormStep3');
+  const btnStep1 = document.getElementById('btnStep1');
+  const btnStep2 = document.getElementById('btnStep2');
+  const btnStep3 = document.getElementById('btnStep3');
+  const btnSkip = document.getElementById('btnSkip');
 
-  var fullName = document.getElementById('fullName');
-  var email = document.getElementById('email');
-  var password = document.getElementById('password');
-  var confirmPassword = document.getElementById('confirmPassword');
-  var businessName = document.getElementById('businessName');
-  var businessType = document.getElementById('businessType');
-  var businessTypeError = document.getElementById('businessTypeError');
-  var roleError = document.getElementById('roleError');
-  var roleInputs = document.querySelectorAll('input[name="role"]');
+  const fullName = document.getElementById('fullName');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+  const businessName = document.getElementById('businessName');
+  const businessType = document.getElementById('businessType');
+  const businessTypeError = document.getElementById('businessTypeError');
+  const roleError = document.getElementById('roleError');
+  const roleInputs = document.querySelectorAll('input[name="role"]');
 
   function showStep(stepEl) {
     step1.hidden = true;
@@ -237,42 +239,58 @@
     });
   }
 
-  /* ----- Step 3: Optional — Skip or Save ----- */
-  function finishSignup() {
-    // Save user data for login demo
-    var userData = {
-      email: email.value.trim(),
-      password: password.value,
-      plan: plan
-    };
-    try {
-      localStorage.setItem('sellsync_user_data', JSON.stringify(userData));
-    } catch (e) {
-      console.error('Could not save user data', e);
-    }
+  /* ----- Step 3: Submit to backend ----- */
+  function finishSignup(phone) {
+    var nameVal = fullName.value.trim();
+    var emailVal = email.value.trim();
+    var passVal = password.value;
 
-    showStep(null);
-    showFormMsg('success', 'Account created! Taking you to sign in…');
-    setTimeout(function () {
-      try { sessionStorage.setItem(PLAN_KEY, plan); } catch (e) {}
-      window.location.href = 'login.html';
-    }, 1200);
+    setLoading(btnStep3 || btnSkip, true);
+    hideFormMsg();
+
+    fetch(API_BASE_URL + '/api/auth/signUp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: nameVal,
+        email: emailVal,
+        password: passVal,
+        phone: phone || ''
+      })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        setLoading(btnStep3 || btnSkip, false);
+        if (data.message && data.message.toLowerCase().indexOf('email') !== -1) {
+          showFormMsg('success', 'Account created! Check your email to verify your account.');
+          setTimeout(function () {
+            try { sessionStorage.setItem(PLAN_KEY, plan); } catch (e) {}
+            window.location.href = '/thanks';
+          }, 3000);
+        } else if (data.message) {
+          showFormMsg('error', data.message);
+        } else {
+          showFormMsg('error', 'Something went wrong. Please try again.');
+        }
+      })
+      .catch(function (err) {
+        setLoading(btnStep3 || btnSkip, false);
+        console.error('Signup error:', err);
+        showFormMsg('error', 'Could not connect to server. Please try again.');
+      });
   }
 
   if (btnSkip) {
     btnSkip.addEventListener('click', function () {
-      finishSignup();
+      finishSignup('');
     });
   }
 
   if (form3) {
     form3.addEventListener('submit', function (e) {
       e.preventDefault();
-      setLoading(btnStep3, true);
-      setTimeout(function () {
-        setLoading(btnStep3, false);
-        finishSignup();
-      }, 500);
+      var phoneVal = document.getElementById('phone').value.trim();
+      finishSignup(phoneVal);
     });
   }
 })();

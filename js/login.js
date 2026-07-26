@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  const API_BASE_URL = CONFIG.API_BASE_URL;
+
   const form = document.getElementById('loginForm');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
@@ -14,7 +16,7 @@
   /* ----- Show / hide password ----- */
   if (togglePassword && passwordInput) {
     togglePassword.addEventListener('click', function () {
-      const isPassword = passwordInput.type === 'password';
+      var isPassword = passwordInput.type === 'password';
       passwordInput.type = isPassword ? 'text' : 'password';
       togglePassword.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
       togglePassword.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
@@ -25,7 +27,7 @@
   /* ----- Caps Lock warning ----- */
   function checkCapsLock(e) {
     if (!e.getModifierState) return;
-    const on = e.getModifierState('CapsLock');
+    var on = e.getModifierState('CapsLock');
     capsWarning.classList.toggle('visible', on);
   }
 
@@ -41,13 +43,13 @@
   /* ----- Validation helpers ----- */
   function showFieldError(input, message) {
     input.classList.add('error');
-    const el = input.id === 'email' ? emailError : passwordError;
+    var el = input.id === 'email' ? emailError : passwordError;
     if (el) el.textContent = message;
   }
 
   function clearFieldError(input) {
     input.classList.remove('error');
-    const el = input.id === 'email' ? emailError : passwordError;
+    var el = input.id === 'email' ? emailError : passwordError;
     if (el) el.textContent = '';
   }
 
@@ -61,12 +63,19 @@
     formMessage.textContent = '';
   }
 
+  function setLoading(on) {
+    submitBtn.disabled = on;
+    submitBtn.classList.toggle('loading', !!on);
+  }
+
   function validateEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
+
+  /* ----- Check for reset password success ----- */
   (function () {
     try {
-      const params = new URLSearchParams(window.location.search || '');
+      var params = new URLSearchParams(window.location.search || '');
       if (params.get('reset') === '1') {
         showFormMessage('success', 'Password updated. You can now sign in.');
       }
@@ -74,9 +83,9 @@
   })();
 
   function validateForm() {
-    let valid = true;
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+    var valid = true;
+    var email = emailInput.value.trim();
+    var password = passwordInput.value;
 
     clearFieldError(emailInput);
     clearFieldError(passwordInput);
@@ -112,78 +121,6 @@
     });
   });
 
-  /* ----- Google Sign-In functionality ----- */
-  function handleGoogleCredentialResponse(response) {
-    const googleAuth = document.getElementById('googleAuth');
-    if (googleAuth) googleAuth.classList.add('loading');
-
-    fetch('/auth/google', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        credential: response.credential
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        showFormMessage('success', `Welcome back! Redirecting to your dashboard...`);
-        setTimeout(function () {
-          window.location.href = 'business.html?login_success=true&plan=' + (data.plan || 'basic');
-        }, 1200);
-      } else {
-        showFormMessage('error', data.error || 'Google authentication failed.');
-        if (googleAuth) googleAuth.classList.remove('loading');
-      }
-    })
-    .catch(err => {
-      console.error('Google auth error:', err);
-      showFormMessage('error', 'Authentication service unavailable. Please try again.');
-      if (googleAuth) googleAuth.classList.remove('loading');
-    });
-  }
-
-  // Configure Google Sign-In
-  function initializeGoogleSignIn() {
-    // Check if Google Sign-In library is loaded
-    if (typeof google !== 'undefined' && google.accounts) {
-      // Get Google Client ID from server
-      fetch('/api/config/google')
-        .then(res => res.json())
-        .then(config => {
-          if (config.clientId) {
-            google.accounts.id.initialize({
-              client_id: config.clientId,
-              callback: handleGoogleCredentialResponse
-            });
-            
-            // Render the Google Sign-In button
-            google.accounts.id.renderButton(
-              document.querySelector('.g_id_signin'),
-              {
-                theme: 'outline',
-                size: 'large',
-                text: 'sign_in_with',
-                shape: 'rectangular'
-              }
-            );
-          }
-        })
-        .catch(err => {
-          console.error('Failed to load Google config:', err);
-        });
-    }
-  }
-
-  // Initialize Google Sign-In when DOM is loaded
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeGoogleSignIn);
-  } else {
-    initializeGoogleSignIn();
-  }
-
   /* ----- Form submit ----- */
   if (form) {
     form.addEventListener('submit', function (e) {
@@ -192,30 +129,44 @@
 
       if (!validateForm()) return;
 
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
+      var email = emailInput.value.trim();
+      var password = passwordInput.value;
 
-      submitBtn.disabled = true;
-      submitBtn.classList.add('loading');
+      setLoading(true);
 
-      /* Simulate network request; replace with real fetch() when you have a backend */
-      setTimeout(function () {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
+      fetch(API_BASE_URL + '/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: password })
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+        .then(function (result) {
+          setLoading(false);
 
-        // Demo login logic with localStorage
-        const storedUser = JSON.parse(localStorage.getItem('sellsync_user_data') || '{}');
-        if (storedUser.email === email && storedUser.password === password) {
-          showFormMessage('success', `Welcome back! Redirecting to your ${storedUser.plan} dashboard...`);
+          if (!result.ok || !result.data.success) {
+            var msg = (result.data && result.data.message) ? result.data.message : 'Invalid email or password.';
+            showFormMessage('error', msg);
+            return;
+          }
+
+          /* Store token and user data */
+          if (result.data.token) {
+            localStorage.setItem('sellsync_token', result.data.token);
+          }
+          if (result.data.data) {
+            localStorage.setItem('sellsync_user', JSON.stringify(result.data.data));
+          }
+
+          showFormMessage('success', 'Signed in. Redirecting...');
           setTimeout(function () {
-            // In a real app, this would go to a dashboard. 
-            // For this demo, we can redirect to a success page or back to business.html with a plan parameter.
-            window.location.href = 'business.html?login_success=true&plan=' + storedUser.plan;
-          }, 1200);
-        } else {
-          showFormMessage('error', 'Invalid email or password. Please try again.');
-        }
-      }, 1200);
+            window.location.href = '/coming-soon';
+          }, 800);
+        })
+        .catch(function (err) {
+          setLoading(false);
+          console.error('Login error:', err);
+          showFormMessage('error', 'Could not connect to server. Please try again.');
+        });
     });
   }
 })();

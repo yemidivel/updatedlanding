@@ -7,5 +7,5 @@
 
 const CONFIG = {
   API_BASE_URL: "https://sellsync-backend.vercel.app",
-  FRONTEND_URL: "",
+  FRONTEND_URL: "https://sellsync.store",
 };
