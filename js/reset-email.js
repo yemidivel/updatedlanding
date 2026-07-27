@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  const API_BASE_URL = CONFIG.API_BASE_URL;
+
   const form = document.getElementById('resetForm');
   const emailInput = document.getElementById('resetEmail');
   const submitBtn = document.getElementById('submitBtn');
@@ -12,15 +14,11 @@
 
   /* ----- Modal functions ----- */
   function showSuccessModal() {
-    if (successModal) {
-      successModal.classList.add('open');
-    }
+    if (successModal) successModal.classList.add('open');
   }
 
   function closeSuccessModal() {
-    if (successModal) {
-      successModal.classList.remove('open');
-    }
+    if (successModal) successModal.classList.remove('open');
   }
 
   /* ----- Validation helpers ----- */
@@ -49,8 +47,8 @@
   }
 
   function validateForm() {
-    let valid = true;
-    const email = emailInput.value.trim();
+    var valid = true;
+    var email = emailInput.value.trim();
 
     clearFieldError(emailInput);
 
@@ -85,19 +83,17 @@
 
   if (backToLoginBtn) {
     backToLoginBtn.addEventListener('click', function () {
-      window.location.href = 'login.html';
+      window.location.href = '/login';
     });
   }
 
   if (successModal) {
     successModal.addEventListener('click', function (e) {
-      if (e.target === successModal) {
-        closeSuccessModal();
-      }
+      if (e.target === successModal) closeSuccessModal();
     });
   }
 
-  /* ----- Form submit - simulates sending reset token ----- */
+  /* ----- Form submit — call backend API ----- */
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -105,22 +101,30 @@
 
       if (!validateForm()) return;
 
-      const email = emailInput.value.trim();
+      var email = emailInput.value.trim();
 
       submitBtn.disabled = true;
       submitBtn.classList.add('loading');
 
-      /* Simulate sending reset email - backend will handle actual logic */
-      setTimeout(function () {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
+      fetch(API_BASE_URL + '/api/auth/forgotPassword', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
 
-        // Show success message (backend will verify if email exists)
-        showFormMessage('success', 'A reset link has been sent to your email. Please check your inbox to continue.');
-        
-        // Show modal/popup with additional info
-        showSuccessModal();
-      }, 1200);
+          showFormMessage('success', 'A reset link has been sent to your email. Please check your inbox to continue.');
+          showSuccessModal();
+        })
+        .catch(function (err) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
+          console.error('Forgot password error:', err);
+          showFormMessage('error', 'Could not connect to server. Please try again.');
+        });
     });
   }
 })();

@@ -20,6 +20,8 @@
     { "source": "/schedule-call", "destination": "/pages/schedule-call" },
     { "source": "/student", "destination": "/pages/student" },
     { "source": "/support", "destination": "/pages/support" },
-    { "source": "/terms-of-service", "destination": "/pages/terms-of-service" }
+    { "source": "/terms-of-service", "destination": "/pages/terms-of-service" },
+    { "source": "/reset-email", "destination": "/pages/reset-email" },
+    { "source": "/reset-password", "destination": "/pages/reset-password" }
   ]
 }

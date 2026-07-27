@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  const API_BASE_URL = CONFIG.API_BASE_URL;
+
   const form = document.getElementById('newPasswordForm');
   const passwordInput = document.getElementById('newPassword');
   const confirmPasswordInput = document.getElementById('confirmPassword');
@@ -11,10 +13,19 @@
   const passwordError = document.getElementById('passwordError');
   const confirmPasswordError = document.getElementById('confirmPasswordError');
 
+  /* ----- Get token from URL ----- */
+  const token = new URLSearchParams(window.location.search).get('token');
+
+  if (!token) {
+    showFormMessage('error', 'Invalid or missing reset link. Please request a new one.');
+    if (form) form.style.display = 'none';
+    return;
+  }
+
   /* ----- Show / hide password ----- */
   if (togglePassword && passwordInput) {
     togglePassword.addEventListener('click', function () {
-      const isPassword = passwordInput.type === 'password';
+      var isPassword = passwordInput.type === 'password';
       passwordInput.type = isPassword ? 'text' : 'password';
       togglePassword.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
       togglePassword.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
@@ -25,7 +36,7 @@
   /* ----- Caps Lock warning ----- */
   function checkCapsLock(e) {
     if (!e.getModifierState) return;
-    const on = e.getModifierState('CapsLock');
+    var on = e.getModifierState('CapsLock');
     capsWarning.classList.toggle('visible', on);
   }
 
@@ -60,9 +71,9 @@
   }
 
   function validateForm() {
-    let valid = true;
-    const password = passwordInput.value;
-    const confirmPassword = confirmPasswordInput.value;
+    var valid = true;
+    var password = passwordInput.value;
+    var confirmPassword = confirmPasswordInput.value;
 
     clearFieldError(passwordInput, passwordError);
     clearFieldError(confirmPasswordInput, confirmPasswordError);
@@ -111,7 +122,7 @@
     });
   }
 
-  /* ----- Form submit - simulates password update ----- */
+  /* ----- Form submit — call backend API ----- */
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -122,17 +133,31 @@
       submitBtn.disabled = true;
       submitBtn.classList.add('loading');
 
-      /* Simulate password update - backend will handle actual logic */
-      setTimeout(function () {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
+      fetch(API_BASE_URL + '/api/auth/reset-password?token=' + encodeURIComponent(token), {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput.value })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
 
-        showFormMessage('success', 'Password updated successfully! Redirecting to sign in...');
-        
-        setTimeout(function () {
-          window.location.href = 'login.html?reset=1';
-        }, 2000);
-      }, 1200);
+          if (data.success) {
+            showFormMessage('success', 'Password updated successfully! Redirecting to sign in...');
+            setTimeout(function () {
+              window.location.href = '/login?reset=1';
+            }, 2000);
+          } else {
+            showFormMessage('error', data.message || 'Failed to reset password. The link may have expired.');
+          }
+        })
+        .catch(function (err) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
+          console.error('Reset password error:', err);
+          showFormMessage('error', 'Could not connect to server. Please try again.');
+        });
     });
   }
 })();
