@@ -48,9 +48,23 @@
       transition: transform 0.2s;
     }
     .btn:hover { transform: translateY(-2px); }
+    .home-bar {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 20px; background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px); box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-radius: 0 12px 12px 0; text-decoration: none; color: #1f2937;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 600; font-size: 14px;
+    }
+    .home-bar:hover { background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
   </style>
 </head>
 <body>
+  <a href="/business" class="home-bar">
+    <img src="../icon.png" alt="" width="24" height="24" />
+    <span>Home</span>
+  </a>
   <div class="card">
     <div class="icon">
       <svg viewBox="0 0 24 24"><path d="M18.36 5.64a1 1 0 00-1.41 0L12 10.59 7.05 5.64a1 1 0 10-1.41 1.41L10.59 12l-4.95 4.95a1 1 0 101.41 1.41L12 13.41l4.95 4.95a1 1 0 001.41-1.41L13.41 12l4.95-4.95a1 1 0 000-1.41z"/></svg>
