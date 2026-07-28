@@ -42,6 +42,16 @@ document.addEventListener('DOMContentLoaded', function() {
   }, { passive: true });
 
   // Mobile Menu Logic
+  function isMobile() {
+    return window.innerWidth <= 1024;
+  }
+
+  function resetAccordion(nav) {
+    nav.querySelectorAll('.mega-column').forEach(col => col.classList.remove('open'));
+    var dd = nav.querySelector('.dropdown-content');
+    if (dd) dd.classList.remove('show');
+  }
+
   hamburgers.forEach(hamburger => {
     const header = hamburger.closest('.navbar');
     if (!header) return;
@@ -50,20 +60,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
     hamburger.addEventListener('click', (e) => {
       e.stopPropagation();
+      var wasOpen = nav.classList.contains('mobile-open');
       nav.classList.toggle('mobile-open');
       hamburger.classList.toggle('active');
-      const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+
+      if (wasOpen) {
+        resetAccordion(nav);
+      }
+
+      var expanded = hamburger.getAttribute('aria-expanded') === 'true';
       hamburger.setAttribute('aria-expanded', String(!expanded));
+    });
+
+    // Mobile accordion for mega-menu categories
+    var megaColumns = nav.querySelectorAll('.mega-column');
+    megaColumns.forEach(function(col) {
+      var h3 = col.querySelector('h3');
+      if (h3) {
+        h3.addEventListener('click', function(e) {
+          if (!isMobile()) return;
+          e.preventDefault();
+          e.stopPropagation();
+          var isOpen = col.classList.contains('open');
+          megaColumns.forEach(function(other) {
+            if (other !== col) other.classList.remove('open');
+          });
+          col.classList.toggle('open', !isOpen);
+        });
+      }
     });
   });
 
   // Close mobile nav when clicking outside
   document.addEventListener('click', function(e) {
-    document.querySelectorAll('nav.mobile-open').forEach(nav => {
-      const header = nav.closest('.navbar');
+    document.querySelectorAll('nav.mobile-open').forEach(function(nav) {
+      var header = nav.closest('.navbar');
       if (header && !header.contains(e.target)) {
+        resetAccordion(nav);
         nav.classList.remove('mobile-open');
-        const hamburger = header.querySelector('.hamburger');
+        var hamburger = header.querySelector('.hamburger');
         if (hamburger) {
           hamburger.classList.remove('active');
           hamburger.setAttribute('aria-expanded', 'false');

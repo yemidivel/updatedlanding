@@ -375,6 +375,9 @@ nav a {
     box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     z-index: 999;
     padding: 10px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 70vh;
   }
 
   nav.mobile-open ul {
@@ -401,6 +404,78 @@ nav a {
     border-bottom: none;
   }
 
+  /* Mobile Solutions Accordion */
+  nav.mobile-open .dropdown-content {
+    position: static !important;
+    width: auto !important;
+    box-shadow: none !important;
+    border-top: none !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    background: transparent !important;
+    max-height: none !important;
+  }
+
+  nav.mobile-open .dropdown-content.show {
+    display: block !important;
+  }
+
+  nav.mobile-open .mega-menu {
+    flex-direction: column;
+    gap: 0;
+    max-width: none;
+    padding: 0;
+  }
+
+  nav.mobile-open .mega-menu-grid {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  nav.mobile-open .mega-column {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  nav.mobile-open .mega-column h3 {
+    font-size: 0.95rem;
+    padding: 12px 0;
+    cursor: pointer;
+    user-select: none;
+    margin: 0;
+    color: #333;
+    font-weight: 600;
+  }
+
+  nav.mobile-open .mega-column h3::after {
+    content: ' ▾';
+    font-size: 0.75rem;
+    color: #999;
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+
+  nav.mobile-open .mega-column.open h3::after {
+    transform: rotate(180deg);
+  }
+
+  nav.mobile-open .mega-column a {
+    padding: 10px 16px;
+    border-bottom: none;
+    font-size: 0.9rem;
+    color: #555;
+    display: none;
+  }
+
+  nav.mobile-open .mega-column.open a {
+    display: block;
+  }
+
+  nav.mobile-open .mega-featured {
+    display: none;
+  }
+
   .nav-right {
     display: flex;
     align-items: center;
@@ -424,6 +499,22 @@ nav a {
     display: inline-flex;
     flex: 0 0 auto;
     order: 10;
+    z-index: 1002;
+  }
+
+  nav.mobile-open {
+    display: block !important;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 999;
+    padding: 10px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 70vh;
   }
 
   .brand-text {

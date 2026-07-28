@@ -575,8 +575,32 @@ section {
 
 @media (max-width: 768px) {
   .about-hero h1 { font-size: 2.25rem; }
+  .about-hero { padding: 60px 16px 40px; }
+  .about-hero::before { width: 200px; height: 200px; top: -60px; right: -40px; }
   .about-two-col { grid-template-columns: 1fr; gap: 32px; }
   .problem-list { grid-template-columns: 1fr; }
   .mv-grid { grid-template-columns: 1fr; }
+  .usp-grid { grid-template-columns: 1fr; }
+  .values-grid { grid-template-columns: 1fr; }
   .careers-grid-layout { grid-template-columns: 1fr; gap: 32px; }
+  .about-container { padding: 20px 16px; max-width: 100%; }
+  .about-mission { padding: 40px 16px; margin-top: 40px; margin-bottom: 40px; border-radius: 20px; }
+  .about-why { padding: 40px 20px; margin-bottom: 40px; border-radius: 20px; }
+  .about-cta { padding: 40px 20px; margin-bottom: 20px; border-radius: 20px; }
+  .about-cta h2 { font-size: 1.3rem; }
+  .about-careers { padding: 40px 20px; margin-bottom: 40px; border-radius: 20px; }
+  .about-careers h2 { font-size: 1.5rem; }
+  .about-different { margin-bottom: 40px; }
+  .about-different h2 { font-size: 1.5rem; }
+  .about-values h2 { font-size: 1.5rem; }
+  .about-problems { margin-bottom: 40px; }
+  .problems-header h2 { font-size: 1.5rem; }
+  .mission-inner h2 { font-size: 1.5rem; }
+  .stat-card { padding: 16px; }
+  .stat-icon { width: 40px; height: 40px; font-size: 1rem; }
+  .usp-card { padding: 20px; }
+  .value-card { padding: 24px; }
+  .mv-card { padding: 24px; }
+  .hero-badges { gap: 8px; }
+  .badge { padding: 6px 14px; font-size: 0.8rem; }
 }
