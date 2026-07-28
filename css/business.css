@@ -404,7 +404,7 @@ nav a {
     border-bottom: none;
   }
 
-  /* Mobile Solutions Accordion */
+  /* Mobile Solutions Accordion - 3 levels */
   nav.mobile-open .dropdown-content {
     position: static !important;
     width: auto !important;
@@ -416,6 +416,7 @@ nav a {
     transition: none !important;
     background: transparent !important;
     max-height: none !important;
+    display: none !important;
   }
 
   nav.mobile-open .dropdown-content.show {
@@ -439,32 +440,41 @@ nav a {
   }
 
   nav.mobile-open .mega-column h3 {
-    font-size: 0.95rem;
-    padding: 12px 0;
+    font-size: 0.9rem;
+    padding: 12px 0 12px 16px;
     cursor: pointer;
     user-select: none;
     margin: 0;
-    color: #333;
-    font-weight: 600;
+    color: #555;
+    font-weight: 500;
+    text-transform: lowercase !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   nav.mobile-open .mega-column h3::after {
-    content: ' ▾';
-    font-size: 0.75rem;
+    content: '▸';
+    font-size: 0.7rem;
     color: #999;
     transition: transform 0.2s ease;
     display: inline-block;
+    flex-shrink: 0;
   }
 
-  nav.mobile-open .mega-column.open h3::after {
-    transform: rotate(180deg);
+  nav.mobile-open .mega-column.open > h3::after {
+    transform: rotate(90deg);
+  }
+
+  nav.mobile-open .mega-column.open > h3 {
+    color: #007bff;
   }
 
   nav.mobile-open .mega-column a {
-    padding: 10px 16px;
+    padding: 10px 16px 10px 32px;
     border-bottom: none;
-    font-size: 0.9rem;
-    color: #555;
+    font-size: 0.88rem;
+    color: #666;
     display: none;
   }
 
