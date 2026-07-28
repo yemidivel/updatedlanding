@@ -574,33 +574,57 @@ section {
 }
 
 @media (max-width: 768px) {
-  .about-hero h1 { font-size: 2.25rem; }
-  .about-hero { padding: 60px 16px 40px; }
-  .about-hero::before { width: 200px; height: 200px; top: -60px; right: -40px; }
-  .about-two-col { grid-template-columns: 1fr; gap: 32px; }
+  .about-hero h1 { font-size: 1.65rem; line-height: 1.2; }
+  .about-hero { padding: 50px 16px 30px; }
+  .about-hero::before { width: 160px; height: 160px; top: -50px; right: -30px; }
+  .about-hero .subtitle { font-size: 0.95rem; }
+  .about-two-col { grid-template-columns: 1fr; gap: 24px; }
+  .about-text h2 { font-size: 1.35rem; text-align: center; }
+  .about-text p { font-size: 0.92rem; }
   .problem-list { grid-template-columns: 1fr; }
   .mv-grid { grid-template-columns: 1fr; }
   .usp-grid { grid-template-columns: 1fr; }
   .values-grid { grid-template-columns: 1fr; }
-  .careers-grid-layout { grid-template-columns: 1fr; gap: 32px; }
-  .about-container { padding: 20px 16px; max-width: 100%; }
-  .about-mission { padding: 40px 16px; margin-top: 40px; margin-bottom: 40px; border-radius: 20px; }
-  .about-why { padding: 40px 20px; margin-bottom: 40px; border-radius: 20px; }
-  .about-cta { padding: 40px 20px; margin-bottom: 20px; border-radius: 20px; }
-  .about-cta h2 { font-size: 1.3rem; }
-  .about-careers { padding: 40px 20px; margin-bottom: 40px; border-radius: 20px; }
-  .about-careers h2 { font-size: 1.5rem; }
-  .about-different { margin-bottom: 40px; }
-  .about-different h2 { font-size: 1.5rem; }
-  .about-values h2 { font-size: 1.5rem; }
-  .about-problems { margin-bottom: 40px; }
-  .problems-header h2 { font-size: 1.5rem; }
-  .mission-inner h2 { font-size: 1.5rem; }
-  .stat-card { padding: 16px; }
-  .stat-icon { width: 40px; height: 40px; font-size: 1rem; }
-  .usp-card { padding: 20px; }
-  .value-card { padding: 24px; }
-  .mv-card { padding: 24px; }
+  .careers-grid-layout { grid-template-columns: 1fr; gap: 24px; }
+  .about-container { padding: 16px 14px; max-width: 100%; }
+  .about-container section { padding: 40px 0; }
+  .about-mission { padding: 32px 16px; margin-top: 30px; margin-bottom: 30px; border-radius: 20px; }
+  .about-why { padding: 32px 16px; margin-bottom: 30px; border-radius: 20px; }
+  .why-inner h2 { font-size: 1.3rem; }
+  .why-inner p { font-size: 0.92rem; }
+  .about-cta { padding: 32px 16px; margin-bottom: 16px; border-radius: 20px; }
+  .about-cta h2 { font-size: 1.15rem; }
+  .about-careers { padding: 32px 16px; margin-bottom: 30px; border-radius: 20px; }
+  .about-careers h2 { font-size: 1.3rem; }
+  .careers-sub { font-size: 0.95rem; margin-bottom: 30px; }
+  .about-different { margin-bottom: 30px; }
+  .about-different h2 { font-size: 1.3rem; text-align: center; }
+  .about-values h2 { font-size: 1.3rem; text-align: center; }
+  .about-problems { margin-bottom: 30px; }
+  .problems-header h2 { font-size: 1.3rem; }
+  .problems-header p { font-size: 0.92rem; }
+  .mission-inner h2 { font-size: 1.3rem; }
+  .mv-card { padding: 20px; }
+  .mv-card h3 { font-size: 1.1rem; }
+  .mv-card p { font-size: 0.9rem; }
+  .stat-card { padding: 14px; }
+  .stat-icon { width: 36px; height: 36px; font-size: 0.9rem; }
+  .stat-value { font-size: 1rem; }
+  .stat-title { font-size: 0.7rem; }
+  .usp-card { padding: 16px; }
+  .usp-card h3 { font-size: 1rem; }
+  .usp-card p { font-size: 0.88rem; }
+  .value-card { padding: 20px; }
+  .value-card h3 { font-size: 1rem; }
+  .value-card p { font-size: 0.88rem; }
+  .problem-card { padding: 18px; }
+  .problem-card h3 { font-size: 0.95rem; }
+  .problem-card ul { font-size: 0.88rem; }
   .hero-badges { gap: 8px; }
-  .badge { padding: 6px 14px; font-size: 0.8rem; }
+  .badge { padding: 6px 14px; font-size: 0.78rem; }
+  .section-tag { font-size: 0.78rem; padding: 5px 12px; }
+  .careers-intro h3, .work-culture h3, .open-roles h3 { font-size: 1.1rem; }
+  .careers-intro p, .work-culture p { font-size: 0.92rem; }
+  .careers-intro ul, .work-culture ul { font-size: 0.9rem; }
+  .roles-empty p { font-size: 0.92rem; }
 }
