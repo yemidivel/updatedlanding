@@ -1,28 +1,26 @@
 (function () {
   'use strict';
 
-  const API_BASE_URL = CONFIG.API_BASE_URL;
+  var API_BASE_URL = CONFIG.API_BASE_URL;
 
-  const form = document.getElementById('newPasswordForm');
-  const passwordInput = document.getElementById('newPassword');
-  const confirmPasswordInput = document.getElementById('confirmPassword');
-  const togglePassword = document.getElementById('togglePassword');
-  const capsWarning = document.getElementById('capsWarning');
-  const submitBtn = document.getElementById('submitBtn');
-  const formMessage = document.getElementById('formMessage');
-  const passwordError = document.getElementById('passwordError');
-  const confirmPasswordError = document.getElementById('confirmPasswordError');
+  var form = document.getElementById('resetForm');
+  var emailInput = document.getElementById('resetEmail');
+  var codeInput = document.getElementById('resetCode');
+  var passwordInput = document.getElementById('newPassword');
+  var togglePassword = document.getElementById('togglePassword');
+  var capsWarning = document.getElementById('capsWarning');
+  var submitBtn = document.getElementById('submitBtn');
+  var formMessage = document.getElementById('formMessage');
+  var emailError = document.getElementById('emailError');
+  var codeError = document.getElementById('codeError');
+  var passwordError = document.getElementById('passwordError');
 
-  /* ----- Get token from URL ----- */
-  const token = new URLSearchParams(window.location.search).get('token');
-
-  if (!token) {
-    showFormMessage('error', 'Invalid or missing reset link. Please request a new one.');
-    if (form) form.style.display = 'none';
-    return;
+  var params = new URLSearchParams(window.location.search);
+  var prefillEmail = params.get('email');
+  if (prefillEmail && emailInput) {
+    emailInput.value = prefillEmail;
   }
 
-  /* ----- Show / hide password ----- */
   if (togglePassword && passwordInput) {
     togglePassword.addEventListener('click', function () {
       var isPassword = passwordInput.type === 'password';
@@ -33,7 +31,6 @@
     });
   }
 
-  /* ----- Caps Lock warning ----- */
   function checkCapsLock(e) {
     if (!e.getModifierState) return;
     var on = e.getModifierState('CapsLock');
@@ -49,7 +46,6 @@
     });
   }
 
-  /* ----- Validation helpers ----- */
   function showFieldError(input, errorElement, message) {
     input.classList.add('error');
     if (errorElement) errorElement.textContent = message;
@@ -72,11 +68,33 @@
 
   function validateForm() {
     var valid = true;
+    var email = emailInput.value.trim();
+    var code = codeInput.value.trim();
     var password = passwordInput.value;
-    var confirmPassword = confirmPasswordInput.value;
 
+    clearFieldError(emailInput, emailError);
+    clearFieldError(codeInput, codeError);
     clearFieldError(passwordInput, passwordError);
-    clearFieldError(confirmPasswordInput, confirmPasswordError);
+
+    if (!email) {
+      showFieldError(emailInput, emailError, 'Please enter your email address.');
+      if (valid) emailInput.focus();
+      valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showFieldError(emailInput, emailError, 'Please enter a valid email address.');
+      if (valid) emailInput.focus();
+      valid = false;
+    }
+
+    if (!code) {
+      showFieldError(codeInput, codeError, 'Please enter the 6-digit code.');
+      if (valid) codeInput.focus();
+      valid = false;
+    } else if (!/^\d{6}$/.test(code)) {
+      showFieldError(codeInput, codeError, 'Code must be exactly 6 digits.');
+      if (valid) codeInput.focus();
+      valid = false;
+    }
 
     if (!password) {
       showFieldError(passwordInput, passwordError, 'Please enter a new password.');
@@ -88,41 +106,30 @@
       valid = false;
     }
 
-    if (!confirmPassword) {
-      showFieldError(confirmPasswordInput, confirmPasswordError, 'Please confirm your password.');
-      if (valid) confirmPasswordInput.focus();
-      valid = false;
-    } else if (password !== confirmPassword) {
-      showFieldError(confirmPasswordInput, confirmPasswordError, 'Passwords do not match.');
-      if (valid) confirmPasswordInput.focus();
-      valid = false;
-    }
-
     return valid;
   }
 
-  /* ----- Clear errors on input ----- */
+  if (emailInput) {
+    emailInput.addEventListener('input', function () {
+      clearFieldError(emailInput, emailError);
+      hideFormMessage();
+    });
+  }
+
+  if (codeInput) {
+    codeInput.addEventListener('input', function () {
+      clearFieldError(codeInput, codeError);
+      hideFormMessage();
+    });
+  }
+
   if (passwordInput) {
     passwordInput.addEventListener('input', function () {
       clearFieldError(passwordInput, passwordError);
       hideFormMessage();
     });
-    passwordInput.addEventListener('focus', function () {
-      clearFieldError(passwordInput, passwordError);
-    });
   }
 
-  if (confirmPasswordInput) {
-    confirmPasswordInput.addEventListener('input', function () {
-      clearFieldError(confirmPasswordInput, confirmPasswordError);
-      hideFormMessage();
-    });
-    confirmPasswordInput.addEventListener('focus', function () {
-      clearFieldError(confirmPasswordInput, confirmPasswordError);
-    });
-  }
-
-  /* ----- Form submit — call backend API ----- */
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -133,10 +140,14 @@
       submitBtn.disabled = true;
       submitBtn.classList.add('loading');
 
-      fetch(API_BASE_URL + '/api/auth/reset-password?token=' + encodeURIComponent(token), {
-        method: 'PATCH',
+      fetch(API_BASE_URL + '/api/auth/reset-password', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: passwordInput.value })
+        body: JSON.stringify({
+          email: emailInput.value.trim(),
+          code: codeInput.value.trim(),
+          password: passwordInput.value
+        })
       })
         .then(function (r) { return r.json(); })
         .then(function (data) {
@@ -149,7 +160,7 @@
               window.location.href = '/login?reset=1';
             }, 2000);
           } else {
-            showFormMessage('error', data.message || 'Failed to reset password. The link may have expired.');
+            showFormMessage('error', data.message || 'Failed to reset password. The code may have expired.');
           }
         })
         .catch(function (err) {

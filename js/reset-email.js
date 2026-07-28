@@ -1,27 +1,14 @@
 (function () {
   'use strict';
 
-  const API_BASE_URL = CONFIG.API_BASE_URL;
+  var API_BASE_URL = CONFIG.API_BASE_URL;
 
-  const form = document.getElementById('resetForm');
-  const emailInput = document.getElementById('resetEmail');
-  const submitBtn = document.getElementById('submitBtn');
-  const formMessage = document.getElementById('formMessage');
-  const emailError = document.getElementById('emailError');
-  const successModal = document.getElementById('success-modal');
-  const closeModalBtn = successModal ? successModal.querySelector('.close-modal') : null;
-  const backToLoginBtn = document.getElementById('backToLoginBtn');
+  var form = document.getElementById('forgotForm');
+  var emailInput = document.getElementById('forgotEmail');
+  var submitBtn = document.getElementById('submitBtn');
+  var formMessage = document.getElementById('formMessage');
+  var emailError = document.getElementById('emailError');
 
-  /* ----- Modal functions ----- */
-  function showSuccessModal() {
-    if (successModal) successModal.classList.add('open');
-  }
-
-  function closeSuccessModal() {
-    if (successModal) successModal.classList.remove('open');
-  }
-
-  /* ----- Validation helpers ----- */
   function showFieldError(input, message) {
     input.classList.add('error');
     if (emailError) emailError.textContent = message;
@@ -65,7 +52,6 @@
     return valid;
   }
 
-  /* ----- Clear errors on input ----- */
   if (emailInput) {
     emailInput.addEventListener('input', function () {
       clearFieldError(emailInput);
@@ -76,24 +62,6 @@
     });
   }
 
-  /* ----- Modal event listeners ----- */
-  if (closeModalBtn) {
-    closeModalBtn.addEventListener('click', closeSuccessModal);
-  }
-
-  if (backToLoginBtn) {
-    backToLoginBtn.addEventListener('click', function () {
-      window.location.href = '/login';
-    });
-  }
-
-  if (successModal) {
-    successModal.addEventListener('click', function (e) {
-      if (e.target === successModal) closeSuccessModal();
-    });
-  }
-
-  /* ----- Form submit — call backend API ----- */
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -116,8 +84,11 @@
           submitBtn.disabled = false;
           submitBtn.classList.remove('loading');
 
-          showFormMessage('success', 'A reset link has been sent to your email. Please check your inbox to continue.');
-          showSuccessModal();
+          showFormMessage('success', 'A reset code has been sent to your email. Redirecting...');
+
+          setTimeout(function () {
+            window.location.href = '/reset-password?email=' + encodeURIComponent(email);
+          }, 1500);
         })
         .catch(function (err) {
           submitBtn.disabled = false;
