@@ -204,9 +204,7 @@ section {
   margin-bottom: 20px;
 }
 
-.about-text ul,
-.careers-intro ul,
-.work-culture ul {
+.about-text ul {
   margin: 12px 0 24px;
   padding-left: 20px;
   list-style-type: none;
@@ -221,14 +219,19 @@ section {
   position: relative;
 }
 
-.about-text li::before,
-.careers-intro li::before,
-.work-culture li::before {
+.about-text li::before {
   content: "→";
   position: absolute;
   left: -20px;
   color: var(--brand-blue);
   font-weight: bold;
+}
+
+.careers-intro ul,
+.work-culture ul {
+  margin: 12px 0 24px;
+  padding-left: 20px;
+  list-style-type: disc;
 }
 
 .about-stats {
@@ -269,20 +272,18 @@ section {
 }
 
 .about-mission {
-  background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
-  color: white;
-  padding: 80px 24px;
+  background: var(--brand-blue-soft);
+  padding: 60px 40px;
   border-radius: 30px;
   margin-top: 60px;
   margin-bottom: 80px;
-  box-shadow: 0 20px 40px rgba(41, 121, 255, 0.2);
 }
 
 .mission-inner h2 {
   text-align: center;
   font-size: 1.85rem;
   margin-bottom: 40px;
-  color: white;
+  color: #0f172a;
 }
 
 .mv-grid {
@@ -292,22 +293,28 @@ section {
 }
 
 .mv-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: white;
   border-radius: 20px;
   padding: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.mv-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
 }
 
 .mv-card h3 {
   font-size: 1.35rem;
   margin-bottom: 12px;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .mv-card p {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #cbd5e1;
+  color: #475569;
 }
 
 .about-problems {
@@ -490,7 +497,7 @@ section {
   margin-bottom: 48px;
 }
 
-.careers-intro h3, .work-culture h3, .open-roles h3 {
+.careers-intro h3, .work-culture h3 {
   font-size: 1.35rem;
   margin-bottom: 20px;
   color: #0f172a;
@@ -499,28 +506,60 @@ section {
   display: inline-block;
 }
 
-.roles-empty {
-  text-align: center;
-  padding: 48px;
-  background: #f8fafc;
-  border-radius: 20px;
-  border: 2px dashed #e2e8f0;
-  margin: 32px 0;
+.careers-roles-info {
+  margin-bottom: 32px;
 }
 
-.roles-empty p {
+.careers-roles-info h3 {
+  font-size: 1.35rem;
+  margin-bottom: 20px;
+  color: #0f172a;
+  border-bottom: 2px solid var(--brand-blue-soft);
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.careers-roles-info p {
   font-size: 1.05rem;
   color: #64748b;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
-.roles-empty a {
+.roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.role-tag {
+  background: var(--brand-blue-soft);
+  color: var(--brand-blue);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.open-roles {
+  text-align: center;
+  padding: 32px;
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.open-roles p {
+  font-size: 1.05rem;
+  color: #64748b;
+}
+
+.open-roles a {
   color: var(--brand-blue);
   font-weight: 700;
   text-decoration: none;
 }
 
-.roles-empty a:hover {
+.open-roles a:hover {
   text-decoration: underline;
 }
 
@@ -588,7 +627,7 @@ section {
   .careers-grid-layout { grid-template-columns: 1fr; gap: 24px; }
   .about-container { padding: 16px 14px; max-width: 100%; }
   .about-container section { padding: 40px 0; }
-  .about-mission { padding: 32px 16px; margin-top: 30px; margin-bottom: 30px; border-radius: 20px; }
+  .about-mission { padding: 32px 16px; margin-top: 30px; margin-bottom: 30px; border-radius: 20px; background: var(--brand-blue-soft); }
   .about-why { padding: 32px 16px; margin-bottom: 30px; border-radius: 20px; }
   .why-inner h2 { font-size: 1.3rem; }
   .why-inner p { font-size: 0.92rem; }
