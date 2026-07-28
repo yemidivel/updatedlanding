@@ -4,7 +4,7 @@
   var form = document.getElementById('scheduleForm');
   var msg = document.getElementById('scheduleMessage');
   var btn = document.getElementById('submitBtn');
-  var apiBase = (window.location.origin && window.location.origin !== 'null') ? '' : 'http://localhost:5050';
+  var apiBase = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) ? CONFIG.API_BASE_URL : '';
 
   var fields = {
     fullName: document.getElementById('fullName'),
