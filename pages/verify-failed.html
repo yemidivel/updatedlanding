@@ -4,74 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Verification Failed — SellSync</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card {
-      background: white;
-      border-radius: 24px;
-      padding: 60px 48px;
-      text-align: center;
-      max-width: 480px;
-      width: 90%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-    .icon {
-      width: 80px;
-      height: 80px;
-      background: #ef4444;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px;
-    }
-    .icon svg { width: 40px; height: 40px; fill: white; }
-    h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 12px; }
-    p { color: #6b7280; font-size: 16px; line-height: 1.6; }
-    .btn {
-      display: inline-block;
-      margin-top: 32px;
-      padding: 14px 40px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform 0.2s;
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .home-bar {
-      position: fixed; top: 0; left: 0; z-index: 9999;
-      display: flex; align-items: center; gap: 8px;
-      padding: 12px 20px; background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px); box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      border-radius: 0 12px 12px 0; text-decoration: none; color: #1f2937;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-weight: 600; font-size: 14px;
-    }
-    .home-bar:hover { background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
-  </style>
+  <link rel="icon" type="image/png" href="../icon.png" />
+  <link rel="stylesheet" href="../css/login.css?v=6" />
 </head>
 <body>
-  <a href="/business" class="home-bar">
-    <img src="../icon.png" alt="" width="24" height="24" />
-    <span>Home</span>
-  </a>
-  <div class="card">
-    <div class="icon">
-      <svg viewBox="0 0 24 24"><path d="M18.36 5.64a1 1 0 00-1.41 0L12 10.59 7.05 5.64a1 1 0 10-1.41 1.41L10.59 12l-4.95 4.95a1 1 0 101.41 1.41L12 13.41l4.95 4.95a1 1 0 001.41-1.41L13.41 12l4.95-4.95a1 1 0 000-1.41z"/></svg>
+  <div class="login-container">
+    <div class="left-panel">
+      <div class="brand-content">
+        <img src="../icon.png" alt="SellSync" class="brand-logo" width="160" height="160" />
+        <h1><span>SellSync</span></h1>
+        <p>One platform. Total retail control.</p>
+      </div>
     </div>
-    <h1>Verification Failed</h1>
-    <p>The verification link is invalid or has expired.<br/>Please try signing up again.</p>
-    <a href="/signup" class="btn">Sign Up Again</a>
+    <div class="right-panel">
+      <div class="form-wrapper" style="text-align:center;">
+        <div style="width:80px;height:80px;background:#ef4444;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="white"><path d="M18.36 5.64a1 1 0 00-1.41 0L12 10.59 7.05 5.64a1 1 0 10-1.41 1.41L10.59 12l-4.95 4.95a1 1 0 101.41 1.41L12 13.41l4.95 4.95a1 1 0 001.41-1.41L13.41 12l4.95-4.95a1 1 0 000-1.41z"/></svg>
+        </div>
+        <h2>Verification Failed</h2>
+        <p class="subtitle">The verification link is invalid or has expired. Please try signing up again.</p>
+        <a href="/signup?plan=starter" class="btn-login" style="display:inline-block;margin-top:32px;text-decoration:none;text-align:center;">Sign Up Again</a>
+      </div>
+    </div>
   </div>
 </body>
 </html>
