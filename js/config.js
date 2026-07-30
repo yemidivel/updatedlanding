@@ -7,5 +7,5 @@
 
 const CONFIG = {
   API_BASE_URL: "https://api.sellsync.store",
-  FRONTEND_URL: "https://updatedlanding.vercel.app",
+  FRONTEND_URL: "https://sellsync.store",
 };
