@@ -92,7 +92,7 @@
       </div>
     </div>
     <div class="hero-image">
-      <img src="../ChatGPT Image Jul 30, 2026, 10_24_19 AM.png" alt="Retail dashboard on tablet" />
+      <img src="../hero-dashboard.png" alt="Retail dashboard on tablet" />
     </div>
   </main>
 
@@ -586,12 +586,13 @@
 
     dots.forEach((dot,i)=>dot.addEventListener('click', ()=>showTestimonial(i)));
   </script>
+  <script src="../js/config.js"></script>
   <script>
     (function() {
       var form = document.getElementById('contactForm');
       var msg = document.getElementById('contactFormMessage');
       var btn = document.getElementById('contactSubmitBtn');
-      var apiBase = typeof CONFIG !== 'undefined' ? CONFIG.API_BASE_URL : 'https://sellsync-backend.vercel.app';
+      var apiBase = typeof CONFIG !== 'undefined' ? CONFIG.API_BASE_URL : 'https://updatedlanding.vercel.app';
 
       function showMsg(type, text) {
         msg.textContent = text;

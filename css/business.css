@@ -324,10 +324,11 @@ nav a {
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  margin-left: auto;
   color: #1f2937;
   font-size: 18px;
   transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  flex-shrink: 0;
+  position: relative;
 }
 
 .hamburger:hover {
@@ -337,6 +338,36 @@ nav a {
 
 .hamburger.active {
   color: #007bff;
+}
+
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: #111827;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.25s ease, opacity 0.2s ease, background-color 0.25s ease;
+}
+
+.hamburger span:nth-child(1) { top: 11px; }
+.hamburger span:nth-child(2) { top: 17px; }
+.hamburger span:nth-child(3) { top: 23px; }
+
+.hamburger.active span:nth-child(1) {
+  top: 17px;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  top: 17px;
+  transform: translateX(-50%) rotate(-45deg);
 }
 
 
@@ -512,8 +543,42 @@ nav a {
     font-size: 14px;
   }
 
+  .hamburger {
+    display: inline-flex;
+  }
+
+  .hamburger span {
+    background-color: #1f2937;
+  }
+}
+
+@media screen and (max-width: 600px) {
   .brand-text {
     font-size: 1.3rem;
+  }
+
+  .hero {
+    padding: 30px 20px;
+    gap: 20px;
+  }
+
+  .hero-text {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-image {
+    flex: 1 1 100%;
+    margin-top: 10px;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    border-radius: 16px;
   }
 }
 
@@ -592,10 +657,14 @@ nav a {
 
 .hero-image img {
   width: 100%;
-  max-width: 500px;
-  border-radius: 100px;
-  opacity: 1;
-  transform: none;
+  max-width: 520px;
+  border-radius: 24px;
+  box-shadow: 0 20px 48px rgba(0,0,0,0.12);
+  transition: transform 0.4s ease;
+}
+
+.hero-image img:hover {
+  transform: scale(1.02);
 }
 
 @media (prefers-reduced-motion: no-preference) {
