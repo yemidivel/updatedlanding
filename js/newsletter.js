@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', function () {
         button.textContent = 'Subscribing...';
         button.disabled = true;
 
-        const apiBase = (window.location.origin && window.location.origin !== 'null') ? '' : 'http://localhost:5050';
+        var apiBase = typeof CONFIG !== 'undefined' ? CONFIG.API_BASE_URL : 'https://api.sellsync.store';
 
-        fetch(apiBase + '/api/subscribe', {
+        fetch(apiBase + '/api/newsletter', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: email })

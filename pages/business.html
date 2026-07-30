@@ -592,7 +592,7 @@
       var form = document.getElementById('contactForm');
       var msg = document.getElementById('contactFormMessage');
       var btn = document.getElementById('contactSubmitBtn');
-      var apiBase = typeof CONFIG !== 'undefined' ? CONFIG.API_BASE_URL : 'https://updatedlanding.vercel.app';
+      var apiBase = typeof CONFIG !== 'undefined' ? CONFIG.API_BASE_URL : 'https://api.sellsync.store';
 
       function showMsg(type, text) {
         msg.textContent = text;
@@ -636,7 +636,7 @@
           }
         }).catch(function() {
           btn.disabled = false;
-          showMsg('error', 'Could not send. Run the contact server (python contact_server.py) and open this page from http://localhost:5050');
+          showMsg('error', 'Could not send. Please check your internet connection and try again.');
         });
       });
     })();
