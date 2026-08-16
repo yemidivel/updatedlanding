@@ -79,10 +79,23 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email })
       })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
+        .then(function (r) {
+          return r.json().then(function (data) {
+            return { ok: r.ok, data: data };
+          });
+        })
+        .then(function (result) {
           submitBtn.disabled = false;
           submitBtn.classList.remove('loading');
+
+          if (!result.ok) {
+            showFormMessage('error', result.data.message || 'Account not found. Please sign up to create an account.');
+
+            setTimeout(function () {
+              window.location.href = '/signup';
+            }, 2000);
+            return;
+          }
 
           showFormMessage('success', 'A reset code has been sent to your email. Redirecting...');
 
