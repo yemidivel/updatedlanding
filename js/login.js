@@ -1,7 +1,9 @@
 (function () {
   'use strict';
 
-  const API_BASE_URL = CONFIG.API_BASE_URL;
+  const API_BASE_URL = CONFIG.USE_MOCK
+    ? (CONFIG.MOCK_API_BASE || window.location.origin)
+    : CONFIG.API_BASE_URL;
 
   const form = document.getElementById('loginForm');
   const emailInput = document.getElementById('email');
@@ -72,12 +74,18 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
-  /* ----- Check for reset password success ----- */
+  /* ----- Prefill email / show one-time messages from the URL ----- */
   (function () {
     try {
       var params = new URLSearchParams(window.location.search || '');
+      var emailParam = params.get('email');
+      if (emailParam && emailInput) {
+        emailInput.value = emailParam;
+      }
       if (params.get('reset') === '1') {
         showFormMessage('success', 'Password updated. You can now sign in.');
+      } else if (params.get('created') === '1') {
+        showFormMessage('success', 'Account created. You can now sign in.');
       }
     } catch (e) {}
   })();
@@ -152,15 +160,26 @@
           /* Store token and user data */
           if (result.data.token) {
             localStorage.setItem('sellsync_token', result.data.token);
+            /* The app reads the token from the `sellsync_token` cookie (same
+               host `localhost`, shared across ports) so navigating from the
+               landing page (:3001) to the app (:5173) carries the session. */
+            document.cookie = 'sellsync_token=' + encodeURIComponent(result.data.token) +
+              '; Path=/; SameSite=Lax; Max-Age=900';
           }
           if (result.data.data) {
             localStorage.setItem('sellsync_user', JSON.stringify(result.data.data));
           }
 
-          showFormMessage('success', 'Signed in. Redirecting...');
-          setTimeout(function () {
-            window.location.href = '/coming-soon';
-          }, 800);
+showFormMessage('success', 'Signed in. Redirecting...');
+        setTimeout(function () {
+          /* Pass the real backend JWT in the URL fragment (never sent to a
+             server) so the handoff also works when the landing and app are on
+             different Vercel domains. The app consumes and strips it on boot. */
+          var token = result.data.token
+            ? '#token=' + encodeURIComponent(result.data.token)
+            : '';
+          window.location.href = CONFIG.APP_URL + token;
+        }, 800);
         })
         .catch(function (err) {
           setLoading(false);

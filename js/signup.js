@@ -1,7 +1,9 @@
 (function () {
   'use strict';
 
-  const API_BASE_URL = CONFIG.API_BASE_URL;
+  const API_BASE_URL = CONFIG.USE_MOCK
+    ? (CONFIG.MOCK_API_BASE || window.location.origin)
+    : CONFIG.API_BASE_URL;
   const PLAN_KEY = 'sellsync_signup_plan';
 
   const plan = (function () {
@@ -244,6 +246,7 @@
     var nameVal = fullName.value.trim();
     var emailVal = email.value.trim();
     var passVal = password.value;
+    var businessVal = businessName ? businessName.value.trim() : '';
 
     setLoading(btnStep3 || btnSkip, true);
     hideFormMsg();
@@ -255,18 +258,22 @@
         name: nameVal,
         email: emailVal,
         password: passVal,
-        phone: phone || ''
+        phone: phone || '',
+        businessName: businessVal
       })
     })
       .then(function (r) { return r.json(); })
       .then(function (data) {
         setLoading(btnStep3 || btnSkip, false);
-        if (data.message && data.message.toLowerCase().indexOf('email') !== -1) {
-          showFormMsg('success', 'Account created! Check your email to verify your account.');
+        if (data.success === true ||
+            (data.message && data.message.toLowerCase().indexOf('email') !== -1)) {
+          // In development the backend auto-verifies accounts, so send the new
+          // user straight to login. (Production still shows the verify message.)
+          showFormMsg('success', 'Account created! You can now sign in.');
           setTimeout(function () {
             try { sessionStorage.setItem(PLAN_KEY, plan); } catch (e) {}
-            window.location.href = '/thanks';
-          }, 3000);
+            window.location.href = '/login?email=' + encodeURIComponent(emailVal) + '&created=1';
+          }, 1200);
         } else if (data.message) {
           showFormMsg('error', data.message);
         } else {
