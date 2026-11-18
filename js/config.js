@@ -25,7 +25,7 @@ const CONFIG = {
    * Where a successful login sends the user. Locally this is the Vite dev
    * server; in production it is the main SellSync app domain.
    */
-  APP_URL: IS_LOCAL ? "http://localhost:5173" : "https://sellsync.store",
+  APP_URL: IS_LOCAL ? "http://localhost:5173" : "https://app.sellsync.store",
 
   /**
    * Mock mode: use the same-origin mock auth API + signed session cookie so
