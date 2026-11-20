@@ -40,8 +40,6 @@
   const businessName = document.getElementById('businessName');
   const businessType = document.getElementById('businessType');
   const businessTypeError = document.getElementById('businessTypeError');
-  const roleError = document.getElementById('roleError');
-  const roleInputs = document.querySelectorAll('input[name="role"]');
 
   function showStep(stepEl) {
     step1.hidden = true;
@@ -125,13 +123,6 @@
       clearError(el);
     });
   });
-  roleInputs.forEach(function (r) {
-    r.addEventListener('change', function () {
-      if (roleError) roleError.textContent = '';
-      hideFormMsg();
-    });
-  });
-
   /* ----- Step 1: Account creation ----- */
   function validateStep1() {
     var ok = true;
@@ -199,15 +190,10 @@
     clearError(businessName);
     clearError(businessType);
     if (businessTypeError) businessTypeError.textContent = '';
-    if (roleError) roleError.textContent = '';
     hideFormMsg();
 
     var nameVal = businessName.value.trim();
     var typeVal = businessType.value;
-    var roleVal = null;
-    roleInputs.forEach(function (r) {
-      if (r.checked) roleVal = r.value;
-    });
 
     if (!nameVal) {
       setError(businessName, 'Please enter your business name.');
@@ -218,10 +204,6 @@
       setError(businessType, 'Please choose a business type.');
       if (businessTypeError) businessTypeError.textContent = 'Please choose a business type.';
       if (ok) businessType.focus();
-      ok = false;
-    }
-    if (!roleVal) {
-      if (roleError) roleError.textContent = 'Please select your role.';
       ok = false;
     }
     return ok;

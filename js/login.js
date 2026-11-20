@@ -179,7 +179,7 @@ showFormMessage('success', 'Signed in. Redirecting...');
             ? '#token=' + encodeURIComponent(result.data.token)
             : '';
           window.location.href = CONFIG.APP_URL + token;
-        }, 800);
+        }, 150);
         })
         .catch(function (err) {
           setLoading(false);
